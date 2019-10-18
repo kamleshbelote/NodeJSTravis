@@ -1,0 +1,31 @@
+language: node_js
+node_js:
+  - "10"
+
+services:
+  - postgresql
+
+env:
+  global:
+    -PORT=5000
+    -BASE_URL="https://localhost:5000"
+    -BASE_PATH="/api/v1/financials"
+    -DB_HOST=localhost
+    -DB_USER=postgres
+    -DB_PASS=
+    -DB_PORT=5432
+    -DB_DATABASE=dv3_staging
+
+branches:
+  only:
+    - master
+
+before_script:
+  - psql -c 'create database dv3_staging;' -U postgres
+  - npm run setup
+
+script:
+  - npm run test
+
+after_success:
+  - npm run doc
